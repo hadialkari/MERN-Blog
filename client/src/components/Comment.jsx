@@ -7,7 +7,7 @@ import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
 
-export default function Comment({ comment, onLike, onEdit }) {
+export default function Comment({ comment, onLike, onEdit, onDelete  }) {
   const [user, setUser] = useState({});
   const { currentUser } = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
@@ -76,29 +76,29 @@ export default function Comment({ comment, onLike, onEdit }) {
         {isEditing ? (
           <>
           <Textarea
-            className='mb-2'
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-          />
-          <div className="flex justify-end gap-2 text-xs">
-            <Button
-             type='button'
-             size='sm'
-             gradientDuoTone='purpleToBlue'
-              onClick={handleSave}
-            >
-              Save
-            </Button>
-            <Button
-             type='button'
-             size='sm'
-             gradientDuoTone='purpleToBlue'
-             outline
-              onClick={() => setIsEditing(false)}
-            >
-              Cancel
-            </Button>
-          </div>
+              className='mb-2'
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+            />
+            <div className='flex justify-end gap-2 text-xs'>
+              <Button
+                type='button'
+                size='sm'
+                gradientDuoTone='purpleToBlue'
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+              <Button
+                type='button'
+                size='sm'
+                gradientDuoTone='purpleToBlue'
+                outline
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+            </div>
           </>
         ) : (
           <>
@@ -123,6 +123,7 @@ export default function Comment({ comment, onLike, onEdit }) {
               </p>
               {currentUser &&
                 (currentUser._id === comment.userId || currentUser.isAdmin) && (
+                  <>
                   <button
                     type='button'
                     onClick={handleEdit}
@@ -130,6 +131,14 @@ export default function Comment({ comment, onLike, onEdit }) {
                   >
                     Edit
                   </button>
+                  <button
+                    type='button'
+                    onClick={() => onDelete(comment._id)}
+                    className='text-gray-400 hover:text-red-500'
+                  >
+                    Delete
+                  </button>
+                </>
                 )}
             </div>
           </>
